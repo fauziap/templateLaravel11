@@ -50,7 +50,7 @@ class Register extends Component
             'password'=> $this->password,
         ]);
         Auth::login($user, true);
-        return redirect()->route('dasboard');
+        return redirect()->route('dashboard');
     }
 
 }

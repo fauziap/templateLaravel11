@@ -19,7 +19,7 @@
                                 placeholder="name@spp.com" wire:model='email' required>
                             <!-- Pesan error untuk email -->
                             @error('email')
-                            <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                                <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                             @enderror
                         </div>
                         <div x-data="{ showPassword: false }">
@@ -31,23 +31,26 @@
                                     wire:model='password' required>
                                 {{-- <input type="checkbox" @click="showPassword = !showPassword" class="ml-2">
                                 <span class="text-gray-700 ml-2">Show Password</span> --}}
-                                <span class="material-symbols-outlined cursor-pointer absolute right-2 ml-2 focus:outline-none"
+                                <span
+                                    class="material-symbols-outlined cursor-pointer absolute right-2 ml-2 focus:outline-none"
                                     @click="showPassword = !showPassword" x-show="!showPassword">visibility</span>
-                                <span class="material-symbols-outlined cursor-pointer absolute  right-2 ml-2 focus:outline-none"
+                                <span
+                                    class="material-symbols-outlined cursor-pointer absolute  right-2 ml-2 focus:outline-none"
                                     @click="showPassword = !showPassword" x-show="showPassword">visibility_off</span>
                             </div>
                             <!-- Pesan error untuk password -->
                             @error('password')
-                            <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
+                                <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                             @enderror
                         </div>
                         <div>
                             <div class="flex no-select items-center">
-                            <input type="checkbox" id="remember" name="remember"
-                                class="h-4 w-4 text-gray-600 cursor-pointer border-gray-300 rounded focus:ring-gray-500" wire:model='remember'>
-                            <label for="remember" class="ml-2 cursor-pointer block text-sm text-gray-900">
-                                Remember
-                            </label>
+                                <input type="checkbox" id="remember" name="remember"
+                                    class="h-4 w-4 text-gray-600 cursor-pointer border-gray-300 rounded focus:ring-gray-500"
+                                    wire:model='remember'>
+                                <label for="remember" class="ml-2 cursor-pointer block text-sm text-gray-900">
+                                    Remember
+                                </label>
                             </div>
                             <div class="flex justify-end -mt-5 items-center">
                                 <p class="font-medium text-sm cursor-pointer hover:underline">Forget Password?</p>
@@ -56,11 +59,14 @@
 
                         <div>
                             <button type="submit"
-                                class="w-full flex justify-center items-center text-white focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-md px-5 py-1.5 text-center bg-gray-600 dark:hover:bg-gray-700 hover:translate-x-1 transition duration-300 dark:focus:ring-gray-800"><span
-                                    class="material-symbols-outlined mr-2 text-[20px]">
+                                class="w-full flex justify-center items-center text-white focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-md px-5 py-1.5 text-center bg-gray-600 dark:hover:bg-gray-700 hover:translate-x-1 transition duration-300 dark:focus:ring-gray-800">
+                                <span class="material-symbols-outlined mr-2 text-[20px]" wire:loading.remove>
                                     login
-                                </span> Sign
-                                in</button>
+                                </span> <span wire:loading.remove> Sign
+                                    in </span>
+                                <div wire:loading> Loading ...
+                                </div>
+                            </button>
                         </div>
 
                         <div>
@@ -74,8 +80,9 @@
                                 </svg> login Google</button>
                         </div>
                         <div class="flex justify-center items-center">
-                            <p class="font-normal text-sm">Don't have an account? <a href="{{ route('register') }}"> <span
-                                    class="font-medium cursor-pointer hover:underline">Sign Up</span></a></p>
+                            <p class="font-normal text-sm">Don't have an account? <a href="{{ route('register') }}"
+                                    wire:navigate> <span class="font-medium cursor-pointer hover:underline">Sign
+                                        Up</span></a></p>
                         </div>
                     </form>
                 </div>
@@ -83,15 +90,52 @@
         </div>
     </div>
     @push('script')
-    <script>
-        function myFunction() {
-            var x = document.getElementById("password");
-            if (x.type === "password") {
-                x.type = "text";
-            } else {
-                x.type = "password";
+        <script>
+            function myFunction() {
+                var x = document.getElementById("password");
+                if (x.type === "password") {
+                    x.type = "text";
+                } else {
+                    x.type = "password";
+                }
             }
-        }
-    </script>
+        </script>
+        <script>
+            document.addEventListener('livewire:load', function () {
+                if ({{ session()->has('seconds') ? 'true' : 'false' }}) {
+                    let seconds = {{ session('seconds', 0) }};
+                    const errorMessage = document.getElementById('error-message');
+
+                    if (errorMessage) {
+                        const timer = setInterval(() => {
+                            seconds--;
+                            if (seconds > 0) {
+                                errorMessage.textContent = `Terlalu banyak percobaan gagal. Silakan coba lagi dalam ${seconds} detik.`;
+                            } else {
+                                clearInterval(timer);
+                                errorMessage.textContent = '';
+                            }
+                        }, 1000);
+                    }
+                }
+
+                Livewire.on('start-timer', event => {
+                    let seconds = event.seconds;
+                    const errorMessage = document.getElementById('error-message');
+
+                    if (errorMessage) {
+                        const timer = setInterval(() => {
+                            seconds--;
+                            if (seconds > 0) {
+                                errorMessage.textContent = `Terlalu banyak percobaan gagal. Silakan coba lagi dalam ${seconds} detik.`;
+                            } else {
+                                clearInterval(timer);
+                                errorMessage.textContent = '';
+                            }
+                        }, 1000);
+                    }
+                });
+            });
+        </script>
     @endpush
 </div>

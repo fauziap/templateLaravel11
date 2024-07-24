@@ -59,12 +59,16 @@
                     </div>
                     <div class="pt-3">
                         <button type="submit"
-                                class="w-full flex justify-center items-center text-white focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-md px-5 py-1.5 text-center bg-gray-600 dark:hover:bg-gray-700 hover:translate-x-1 transition duration-300 dark:focus:ring-gray-800">
-                            <span class="material-symbols-outlined mr-2 text-[20px]">login</span> Daftar Sekarang
+                            class="w-full flex justify-center items-center text-white focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-md px-5 py-1.5 text-center bg-gray-600 dark:hover:bg-gray-700 hover:translate-x-1 transition duration-300 dark:focus:ring-gray-800">
+                            <span class="material-symbols-outlined mr-2 text-[20px]" wire:loading.remove>
+                                login
+                            </span> <span wire:loading.remove> Sign
+                                up </span>
+                            <div wire:loading> Loading ...
+                            </div>
                         </button>
-                    </div>
-                    <div class="flex justify-center items-center">
-                        <p class="font-normal text-sm">Sudah punya akun? <a href="{{ route('login') }}"><span
+                    <div class="flex justify-center items-center mt-3">
+                        <p class="font-normal text-sm">Sudah punya akun? <a href="{{ route('login') }}" wire:navigate><span
                                 class="font-medium cursor-pointer hover:underline">Sign In</span></a> </p>
                     </div>
                 </form>
