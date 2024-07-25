@@ -25,6 +25,14 @@ class AuthController extends Controller
         return view('auth.forgetPassword');
     }
 
+    public function resetPassword(Request $request)
+    {
+        $token = $request->query('token');
+        $email = $request->query('email');
+
+        return view('auth.resetPassword', compact('token', 'email'));
+    }
+
     public function logout(Request $request)
     {
         Auth::logout();

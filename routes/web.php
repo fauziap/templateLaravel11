@@ -9,7 +9,8 @@ route::middleware('guest')->group(function(){
 
     Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::get('/register', [AuthController::class, 'register'])->name('register');
-    Route::get('/forget-password',[AuthController::class, 'forgetPassword'])->name('forgetPassword');
+    Route::get('/forget-password',[AuthController::class, 'forgetPassword'])->name('password.request');
+    Route::get('/reset-password',[AuthController::class, 'resetPassword'])->name('password.reset');
 });
 
 Route::middleware('auth', 'auth.session', 'verified')->group(function(){

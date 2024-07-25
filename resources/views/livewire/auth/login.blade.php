@@ -53,7 +53,7 @@
                                 </label>
                             </div>
                             <div class="flex justify-end -mt-5 items-center">
-                                <a href="{{route('forgetPassword')}}" wire:navigate>
+                                <a href="{{route('password.request')}}" wire:navigate>
                                 <p class="font-medium text-sm cursor-pointer hover:underline">Forget Password?</p></a>
                             </div>
                         </div>

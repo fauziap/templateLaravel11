@@ -10,14 +10,17 @@
                     <h1 class="text-2xl text-center font-bold leading-tight tracking-tight text-gray-700 md:text-2xl">
                         Lupa Kata Sandi
                     </h1>
-                    <form class="space-y-4 md:space-y-6" wire:submit.prevent='sendResetLink'>
-                        @csrf
+                    @if (session('message'))
+                        <div class="mb-4 font-medium text-sm text-green-600">
+                            {{ session('message') }}
+                        </div>
+                    @endif
+                    <form class="space-y-4 md:space-y-6" wire:submit='sendResetLink'>
                         <div>
                             <label for="email" class="block mb-2 text-md font-medium text-gray-900">Email</label>
                             <input type="email" name="email" id="email"
                                 class="bg-gray-50 @error('email') border-red-500 @enderror border text-gray-900 focus:outline-none sm:text-sm rounded-lg focus:ring-gray-300 block w-full p-2.5 placeholder-gray-400"
-                                placeholder="name@example.com" wire:model.live='email' required>
-                            <!-- Pesan error untuk email -->
+                                placeholder="name@example.com" wire:model='email' required>
                             @error('email')
                                 <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                             @enderror
@@ -33,8 +36,8 @@
                             </button>
                         </div>
                         <div class="flex justify-center items-center">
-                            <p class="font-normal text-sm">Kembali ke <a href="{{ route('login') }}"
-                                    wire:navigate> <span class="font-medium cursor-pointer hover:underline">Sign In</span></a></p>
+                            <p class="font-normal text-sm">Kembali ke <a href="{{ route('login') }}" wire:navigate>
+                                    <span class="font-medium cursor-pointer hover:underline">Sign In</span></a></p>
                         </div>
                     </form>
                 </div>
