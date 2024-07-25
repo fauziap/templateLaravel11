@@ -16,7 +16,7 @@
                             <label for="email" class="block mb-2 text-md font-medium text-gray-900">Email</label>
                             <input type="text" name="email" id="email"
                                 class="bg-gray-50 @error('email') border-red-500 @enderror border  text-gray-900 focus:outline-none sm:text-sm rounded-lg focus:ring-gray-300 block w-full p-2.5 placeholder-gray-400"
-                                placeholder="name@spp.com" wire:model='email' required>
+                                placeholder="name@spp.com" wire:model.live='email' required>
                             <!-- Pesan error untuk email -->
                             @error('email')
                                 <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
@@ -28,7 +28,7 @@
                                 <input :type="showPassword ? 'text' : 'password'" name="password" id="password"
                                     placeholder="••••••••"
                                     class="bg-gray-50 focus:outline-none border @error('password') border-red-500 @enderror text-gray-900 sm:text-sm rounded-lg focus:ring-gray-300 block w-full p-2.5 placeholder-gray-400"
-                                    wire:model='password' required>
+                                    wire:model.live='password' required>
                                 {{-- <input type="checkbox" @click="showPassword = !showPassword" class="ml-2">
                                 <span class="text-gray-700 ml-2">Show Password</span> --}}
                                 <span
@@ -47,13 +47,14 @@
                             <div class="flex no-select items-center">
                                 <input type="checkbox" id="remember" name="remember"
                                     class="h-4 w-4 text-gray-600 cursor-pointer border-gray-300 rounded focus:ring-gray-500"
-                                    wire:model='remember'>
+                                    wire:model.live='remember'>
                                 <label for="remember" class="ml-2 cursor-pointer block text-sm text-gray-900">
                                     Remember
                                 </label>
                             </div>
                             <div class="flex justify-end -mt-5 items-center">
-                                <p class="font-medium text-sm cursor-pointer hover:underline">Forget Password?</p>
+                                <a href="{{route('forgetPassword')}}" wire:navigate>
+                                <p class="font-medium text-sm cursor-pointer hover:underline">Forget Password?</p></a>
                             </div>
                         </div>
 
@@ -99,43 +100,6 @@
                     x.type = "password";
                 }
             }
-        </script>
-        <script>
-            document.addEventListener('livewire:load', function () {
-                if ({{ session()->has('seconds') ? 'true' : 'false' }}) {
-                    let seconds = {{ session('seconds', 0) }};
-                    const errorMessage = document.getElementById('error-message');
-
-                    if (errorMessage) {
-                        const timer = setInterval(() => {
-                            seconds--;
-                            if (seconds > 0) {
-                                errorMessage.textContent = `Terlalu banyak percobaan gagal. Silakan coba lagi dalam ${seconds} detik.`;
-                            } else {
-                                clearInterval(timer);
-                                errorMessage.textContent = '';
-                            }
-                        }, 1000);
-                    }
-                }
-
-                Livewire.on('start-timer', event => {
-                    let seconds = event.seconds;
-                    const errorMessage = document.getElementById('error-message');
-
-                    if (errorMessage) {
-                        const timer = setInterval(() => {
-                            seconds--;
-                            if (seconds > 0) {
-                                errorMessage.textContent = `Terlalu banyak percobaan gagal. Silakan coba lagi dalam ${seconds} detik.`;
-                            } else {
-                                clearInterval(timer);
-                                errorMessage.textContent = '';
-                            }
-                        }, 1000);
-                    }
-                });
-            });
         </script>
     @endpush
 </div>

@@ -3,12 +3,15 @@
 namespace App\Livewire\Auth;
 
 use App\Models\User;
+use Livewire\Attributes\Validate;
+use Illuminate\Auth\Events\Registered;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 
 class Register extends Component
 {
     public $nama, $username, $email, $password;
+
 
     public function render()
     {
@@ -39,18 +42,19 @@ class Register extends Component
 
 
     public function registerUser()
-    {
-        // dd($this->password);
-        $this->validate();
+{
+    $validatedData = $this->validate();
 
-        $user = User::create([
-            'nama'=> $this->nama,
-            'username'=> $this->username,
-            'email'=> $this->email,
-            'password'=> $this->password,
-        ]);
-        Auth::login($user, true);
-        return redirect()->route('dashboard');
-    }
+    $userData = collect($validatedData)->except(['_token'])->toArray();
+    $userData['password'] = bcrypt($userData['password']);
+
+    $user = User::create($userData);
+
+    // event(new Registered($user));
+    $user->sendEmailVerificationNotification();
+    Auth::login($user, true);
+
+    return redirect()->route('verification.notice')->with('success', 'Akun berhasil dibuat, silahkan verifikasi email anda');
+}
 
 }

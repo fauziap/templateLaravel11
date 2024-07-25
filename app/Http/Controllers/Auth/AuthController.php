@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
@@ -19,6 +20,11 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
+    public function forgetPassword()
+    {
+        return view('auth.forgetPassword');
+    }
+
     public function logout(Request $request)
     {
         Auth::logout();
@@ -28,5 +34,16 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('login');
+    }
+
+    public function notice()
+    {
+        return view('auth.verifikasiEmail');
+    }
+
+    public function verify(EmailVerificationRequest $request)
+    {
+        $request->fulfill();
+        return redirect()->route('dashboard');
     }
 }
